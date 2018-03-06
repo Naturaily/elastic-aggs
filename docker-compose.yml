@@ -1,0 +1,52 @@
+version: '3'
+
+volumes:
+  postgres:
+  bundle:
+  elasticsearch:
+
+services:
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  elasticsearch:
+    image: elasticsearch:5.5.2
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch:/var/lib/elasticsearch/data
+    environment:
+      - bootstrap.memory_lock=true
+      - 'ES_JAVA_OPTS=-Xmx512m -Xms512m'
+
+  web: &default
+    build: .
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+      - bundle:/bundle
+    depends_on:
+      - db
+      - elasticsearch
+      - redis
+    command: ./bin/start.sh
+    environment:
+      - DATABASE_URL=postgres://postgres@db:5432
+      - REDIS_URL=redis://redis:6379
+      - BUNDLE_PATH=/bundle
+      - ELASTICSEARCH_HOST=elasticsearch
+    tty: true
+    stdin_open: true
+
+  redis:
+    image: redis:latest
+
+  sidekiq:
+    <<: *default
+    command: ./bin/start_sidekiq.sh
+    ports: []
