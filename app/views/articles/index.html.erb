@@ -1,0 +1,24 @@
+<div id="wrapper" >
+  <div id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+      <% @categories.each do |category| %>
+        <li>
+          <a href="#">
+            <b><%= category.name %></b>
+            (<%= category.article_count %>)
+          </a>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <div id="page-content-wrapper">
+    <div class="container-fluid">
+      <% @articles.each do |article| %>
+        <div class="row">
+          <div class="col-sm-3"><%= article.name %></div>
+          <div class="col-sm-3"><%= article.author.name %></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

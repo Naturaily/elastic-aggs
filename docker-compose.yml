@@ -33,20 +33,10 @@ services:
     depends_on:
       - db
       - elasticsearch
-      - redis
     command: ./bin/start.sh
     environment:
       - DATABASE_URL=postgres://postgres@db:5432
-      - REDIS_URL=redis://redis:6379
       - BUNDLE_PATH=/bundle
       - ELASTICSEARCH_HOST=elasticsearch
     tty: true
     stdin_open: true
-
-  redis:
-    image: redis:latest
-
-  sidekiq:
-    <<: *default
-    command: ./bin/start_sidekiq.sh
-    ports: []

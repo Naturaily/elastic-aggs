@@ -3,12 +3,26 @@
   <head>
     <title>ElasticAggs</title>
     <%= csrf_meta_tags %>
-
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <%=link_to root_path, class: "navbar-brand" do %>
+            Categoies counts with Elastic Aggregates
+          <% end %>
+          <%= form_for @search_form, url: articles_path, method: :get, html: { class: "navbar-form navbar-left", role:  "search" } do |f| %>
+            <div class="form-group">
+              <%= f.text_field :search_text, class: "form-control", placeholder: "Search" %><br />
+            </div>
+            <%= f.submit "search", class: "btn btn-default" %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
     <%= yield %>
   </body>
 </html>
